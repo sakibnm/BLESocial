@@ -4,19 +4,19 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
 import android.view.Surface
 import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
@@ -25,10 +25,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.example.ifestexplore.R
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.File
-import java.net.URI
 import java.util.concurrent.Executors
 
 class TakePhoto : AppCompatActivity(), LifecycleOwner {
@@ -254,7 +252,7 @@ class TakePhoto : AppCompatActivity(), LifecycleOwner {
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             // I'M GETTING THE URI OF THE IMAGE AS DATA AND SETTING IT TO THE IMAGEVIEW
             val uri: Uri? = data?.data
-            val newpath = uri?.path
+            val newpath = convertMediaUriToPath(uri)
             Log.d("demo", "Gallery image path: "+newpath)
             val returnIntent = Intent()
             returnIntent.putExtra("filepath", newpath)
@@ -281,6 +279,15 @@ class TakePhoto : AppCompatActivity(), LifecycleOwner {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         startActivityForResult(intent, IMAGE_PICK_CODE) // GIVE AN INTEGER VALUE FOR IMAGE_PICK_CODE LIKE 1000
+    }
+    fun convertMediaUriToPath(uri: Uri?): String? {
+        val proj = arrayOf<String>(MediaStore.Images.Media.DATA)
+        val cursor: Cursor? = contentResolver.query(uri!!, proj, null, null, null)
+        val column_index: Int = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor.moveToFirst()
+        val path: String = cursor.getString(column_index)
+        cursor.close()
+        return path
     }
 
 }

@@ -56,7 +56,9 @@ import org.altbeacon.beacon.Identifier;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -192,6 +194,7 @@ public class Register extends AppCompatActivity {
                 Bundle bundle = data.getExtras();
                 String imagepath = bundle.getString("filepath");
                 currentPhotoPath = imagepath;
+                Log.d(TAG, "Gallery Image path: "+currentPhotoPath);
                 setPic();
             }
         }
@@ -223,7 +226,9 @@ public class Register extends AppCompatActivity {
 ////        Log.d("demo", "setPic: "+ this.bitmap.getByteCount()/1000);
 //        ivUserPhoto.setImageBitmap(this.bitmap);
         File imageFile = new File(currentPhotoPath);
-        Picasso.get().load(imageFile).into(ivUserPhoto);
+        if (imageFile.exists())Picasso.get().load(imageFile).into(ivUserPhoto);
+        else Log.d(TAG, "setPic: "+ "can't find");
+
     }
 
 //        ____________________________________________________________________________________________________________________________________________
