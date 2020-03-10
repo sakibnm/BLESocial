@@ -1,6 +1,8 @@
 package com.example.ifestexplore.utils.camera;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.example.ifestexplore.R;
 import android.os.Bundle;
 import android.content.Intent;
@@ -28,9 +30,11 @@ public class GetImage extends AppCompatActivity {
     private MaterialButton button_cancel, button_ok;
     private ImageView imageView;
     String fileDir = "";
-    String purpose = "";
+    String lensface = "";
     private int FLIP_X = 1;
     private int FLIP_Y = 2;
+    private int FLIP_NONE = 3;
+    private ConstraintLayout progressContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +44,7 @@ public class GetImage extends AppCompatActivity {
         imageView = findViewById(R.id.preview_image);
 
         fileDir = getIntent().getStringExtra("filedir");
-        purpose = getIntent().getStringExtra("pupose");
-        Log.d("demo", "Pupose: "+purpose);
+        lensface = getIntent().getStringExtra("lensface");
 
         Bitmap bitmap = BitmapFactory.decodeFile(fileDir);
 
@@ -56,7 +59,8 @@ public class GetImage extends AppCompatActivity {
 
         float rotation = getRotation(orientation);
 
-        bitmap = rotateAndScaleBitmap(bitmap, FLIP_X , rotation);
+        if (lensface.equals("FRONT"))bitmap = rotateAndScaleBitmap(bitmap, FLIP_X , rotation);
+        else bitmap = rotateAndScaleBitmap(bitmap, FLIP_NONE , rotation);
 //        if (purpose!=null && this.purpose.equals("PROFILE"))bitmap = demirrorBitmap(bitmap);
 
         String filepath = replaceImageFile(bitmap);

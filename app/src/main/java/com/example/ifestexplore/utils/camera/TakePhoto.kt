@@ -10,12 +10,15 @@ import android.util.Log
 import android.util.Size
 import android.view.Surface
 import android.view.TextureView
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
@@ -32,13 +35,19 @@ class TakePhoto : AppCompatActivity(), LifecycleOwner {
     private lateinit var purpose: String
     private lateinit var orientation: String
     private lateinit var button_capture:FloatingActionButton
+    private lateinit var button_switch_camera:FloatingActionButton
+    private lateinit var button_gallery:FloatingActionButton
+    lateinit var progressContainer: ConstraintLayout
     private var CAM_REQ: Int = 0
     var screenWIDTH:Int = 720
     var screenHEIGHT:Int = 1280
 
+    lateinit var lensFace: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_take_photo)
+        progressContainer = findViewById(R.id.progressContainer)
         button_capture = findViewById(R.id.button_capture)
         viewFinder = findViewById(R.id.view_finder)
         screenWIDTH = viewFinder.width
@@ -46,6 +55,23 @@ class TakePhoto : AppCompatActivity(), LifecycleOwner {
 //      Getting request from Parent Activity.....
         val bundle:Bundle = intent.extras!!
         purpose = bundle.getString("purpose", "POST")
+
+        if(purpose=="PROFILE") lensFace = "FRONT"
+        else lensFace = "BACK"
+        //        Switch camera......
+        button_switch_camera = findViewById(R.id.button_flip)
+        button_switch_camera.setOnClickListener(View.OnClickListener {
+            if (lensFace == "FRONT") lensFace = "BACK"
+            else lensFace = "FRONT"
+            if (allPermissionsGranted()) {
+                viewFinder.post { startCamera() }
+
+            } else {
+                ActivityCompat.requestPermissions(
+                        this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+            }
+        })
+
         // Request camera permissions
         if (allPermissionsGranted()) {
             viewFinder.post { startCamera() }
@@ -64,11 +90,15 @@ class TakePhoto : AppCompatActivity(), LifecycleOwner {
     private lateinit var viewFinder: TextureView
 
     private fun startCamera() {
+        CameraX.unbindAll()
+
+
+
         // Create configuration object for the viewfinder use case
         val previewConfig = PreviewConfig.Builder().apply {
 //            setTargetResolution(Size(1280, 960))
             setTargetResolution(Size(screenWIDTH,screenHEIGHT))
-            if (purpose=="PROFILE")setLensFacing(CameraX.LensFacing.FRONT)
+            if (lensFace=="FRONT")setLensFacing(CameraX.LensFacing.FRONT)
             else setLensFacing(CameraX.LensFacing.BACK)
         }.build()
 
@@ -96,7 +126,7 @@ class TakePhoto : AppCompatActivity(), LifecycleOwner {
                     // resolution based on aspect ration and requested mode
                     setCaptureMode(ImageCapture.CaptureMode.MIN_LATENCY)
                     //        TO Use Front Camera: Set Lence Facing....
-                    if (purpose=="PROFILE")setLensFacing(CameraX.LensFacing.FRONT)
+                    if (lensFace=="FRONT")setLensFacing(CameraX.LensFacing.FRONT)
                     else setLensFacing(CameraX.LensFacing.BACK)
 
                 }.build()
@@ -105,6 +135,8 @@ class TakePhoto : AppCompatActivity(), LifecycleOwner {
         button_capture.setOnClickListener {
             val file = File(externalMediaDirs.first(),
                     "${System.currentTimeMillis()}.jpg")
+
+            progressContainer.visibility = View.VISIBLE
 
             imageCapture.takePicture(file, executor,
                     object : ImageCapture.OnImageSavedListener {
@@ -127,7 +159,8 @@ class TakePhoto : AppCompatActivity(), LifecycleOwner {
 //                            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                                 val intent = Intent(applicationContext, GetImage::class.java)
                                 intent.putExtra("filedir", file.absolutePath)
-                                intent.putExtra("purpose", purpose)
+                                intent.putExtra("lensface", lensFace)
+
                                 CAM_REQ = 0x2222
                                 startActivityForResult(intent, CAM_REQ);
                             }
@@ -194,6 +227,7 @@ class TakePhoto : AppCompatActivity(), LifecycleOwner {
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        progressContainer.visibility = View.INVISIBLE
         // Check which request we're responding to
         if (requestCode == CAM_REQ) {
             // Make sure the request was successful
