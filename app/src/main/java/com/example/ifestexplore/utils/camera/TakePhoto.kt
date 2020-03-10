@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Matrix
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
@@ -26,6 +28,7 @@ import com.example.ifestexplore.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.File
+import java.net.URI
 import java.util.concurrent.Executors
 
 class TakePhoto : AppCompatActivity(), LifecycleOwner {
@@ -43,12 +46,16 @@ class TakePhoto : AppCompatActivity(), LifecycleOwner {
     var screenHEIGHT:Int = 1280
 
     lateinit var lensFace: String
+    var PERMISSION_CODE_READ: Int = 3333
+    var PERMISSION_CODE_WRITE: Int = 5555
+    var IMAGE_PICK_CODE: Int = 0x003
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_take_photo)
         progressContainer = findViewById(R.id.progressContainer)
         button_capture = findViewById(R.id.button_capture)
+        button_gallery = findViewById(R.id.button_gallery)
         viewFinder = findViewById(R.id.view_finder)
         screenWIDTH = viewFinder.width
         screenHEIGHT = viewFinder.height
@@ -58,6 +65,12 @@ class TakePhoto : AppCompatActivity(), LifecycleOwner {
 
         if(purpose=="PROFILE") lensFace = "FRONT"
         else lensFace = "BACK"
+
+//      GALLERY photos......
+        button_gallery.setOnClickListener(View.OnClickListener {
+            checkPermissionForImage()
+        })
+
         //        Switch camera......
         button_switch_camera = findViewById(R.id.button_flip)
         button_switch_camera.setOnClickListener(View.OnClickListener {
@@ -91,8 +104,6 @@ class TakePhoto : AppCompatActivity(), LifecycleOwner {
 
     private fun startCamera() {
         CameraX.unbindAll()
-
-
 
         // Create configuration object for the viewfinder use case
         val previewConfig = PreviewConfig.Builder().apply {
@@ -240,8 +251,41 @@ class TakePhoto : AppCompatActivity(), LifecycleOwner {
                 finish()
             }
         }
+        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
+            // I'M GETTING THE URI OF THE IMAGE AS DATA AND SETTING IT TO THE IMAGEVIEW
+            val uri: Uri? = data?.data
+            val newpath = uri?.path
+            Log.d("demo", "Gallery image path: "+newpath)
+            val returnIntent = Intent()
+            returnIntent.putExtra("filepath", newpath)
+            setResult(Activity.RESULT_OK, returnIntent)
+            finish()
+        }
     }
+    private fun checkPermissionForImage() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if ((checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
+                    && (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
+            ) {
+                val permission = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+                val permissionCoarse = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+                requestPermissions(permission, PERMISSION_CODE_READ) // GIVE AN INTEGER VALUE FOR PERMISSION_CODE_READ LIKE 1001
+                requestPermissions(permissionCoarse, PERMISSION_CODE_WRITE) // GIVE AN INTEGER VALUE FOR PERMISSION_CODE_WRITE LIKE 1002
+            } else {
+                pickImageFromGallery()
+            }
+        }
+    }
+    private fun pickImageFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, IMAGE_PICK_CODE) // GIVE AN INTEGER VALUE FOR IMAGE_PICK_CODE LIKE 1000
+    }
+
 }
+
+
 
 private fun Intent.putExtra(s: String, newBitmap: Any?) {
 
