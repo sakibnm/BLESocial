@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">iFestExplore</string>
+    <string name="txt_photo">Click to set your profile picture</string>
+    <string name="title_activity_home_screen">HomeScreen</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="nav_rec">Received</string>
+    <string name="nav_new_post">New Post</string>
+    <string name="nav_my_posts">My Posts</string>
+    <string name="nav_bookmarks">Favorites</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="share_button">Share</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="txt_takePhotoItem">Take the item\'s photo</string>
+    <string name="button_create_Share">Share</string>
+    <string name="button_create_Clear">Clear All</string>
+    <string name="button_my_posts_view">View</string>
+    <string name="button_my_posts_Stop">Stop Posting</string>
+    <string name="buttoon_rec_txt_view">View</string>
+    <string name="creator_Text">"Shared by "</string>
+    <string name="forwardText">and Forwarded by</string>
+    <string name="textShared">Posted by</string>
+    <string name="fav_button">Mark Favorite</string>
+    <string name="fwd_button">Re Share</string>
+    <string name="hint_title">Title</string>
+    <string name="button_text_stop_posting">Stop Posting</string>
+    <string name="text_login_register">Register</string>
+    <string name="sign_in_string">Already have an account?</string>
+    <string name="text_sign_in_clicker">login</string>
+    <string name="remove_Fav">Remove</string>
+    <string name="channel_name">Notif Channel</string>
+    <string name="channel_description">Only Channel We have</string>
+    <string name="new_review_received">New Reviews Received!</string>
+    <string name="fwded_by">forwarded by</string>
+    <string name="fwd_review_text">Forwarding review!</string>
+    <string name="text_logout">Logout</string>
+    <string name="spinner_Text">Search and Select the Booth (Country)</string>
+    <string name="take_survey">Take Survey</string>
+    <string name="at_booth">At Booth</string>
+    <string name="getting_you_in">Getting you in!!!</string>
+    <string name="create_account">Create Account</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="name">Name</string>
+    <string name="todo">TODO</string>
+    <string name="login">Login</string>
+</resources>

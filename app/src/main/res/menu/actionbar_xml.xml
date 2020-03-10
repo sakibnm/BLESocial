@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_logout"
+
+        android:icon="@drawable/ic_logout_24dp"
+        android:title="Logout" />
+    <item
+        android:id="@+id/action_survey"
+
+        android:icon="@drawable/ic_logout_24dp"
+        android:title="Complete Survey" />
+
+</menu>
