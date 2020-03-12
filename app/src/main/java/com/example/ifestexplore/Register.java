@@ -221,14 +221,38 @@ public class Register extends AppCompatActivity {
 //        bmOptions.inPurgeable = true;
 
         this.bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+        this.bitmap = cropCenter(this.bitmap);
 //        this.bitmap = Bitmap.createScaledBitmap(this.bitmap, 1280, 960,false);
 //        Log.d("demo", "setPic: "+ this.bitmap.getWidth()+" "+this.bitmap.getHeight());
 //        Log.d("demo", "setPic: "+ this.bitmap.getByteCount()/1000);
 //        ivUserPhoto.setImageBitmap(this.bitmap);
-        File imageFile = new File(currentPhotoPath);
-        if (imageFile.exists())Picasso.get().load(imageFile).into(ivUserPhoto);
+//        File imageFile = new File(currentPhotoPath);
+//        if (imageFile.exists())Picasso.get().load(imageFile).into(ivUserPhoto);
+        if (this.bitmap!=null) ivUserPhoto.setImageBitmap(this.bitmap);
         else Log.d(TAG, "setPic: "+ "can't find");
 
+    }
+
+    private Bitmap cropCenter(Bitmap srcBmp) {
+        Bitmap dstBmp = null;
+        if (srcBmp.getWidth() >= srcBmp.getHeight()){
+            dstBmp = Bitmap.createBitmap(
+                    srcBmp,
+                    srcBmp.getWidth()/2 - srcBmp.getHeight()/2,
+                    0,
+                    srcBmp.getHeight(),
+                    srcBmp.getHeight()
+            );
+        }else{
+            dstBmp = Bitmap.createBitmap(
+                    srcBmp,
+                    0,
+                    srcBmp.getHeight()/2 - srcBmp.getWidth()/2,
+                    srcBmp.getWidth(),
+                    srcBmp.getWidth()
+            );
+        }
+        return dstBmp;
     }
 
 //        ____________________________________________________________________________________________________________________________________________
