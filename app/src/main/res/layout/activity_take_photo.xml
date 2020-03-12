@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".utils.camera.TakePhoto">
 
+    <fragment
+        android:id="@+id/fragment_gallery"
+        android:name="com.example.ifestexplore.fragments.GalleryFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextureView
         android:id="@+id/view_finder"
         android:layout_width="wrap_content"
@@ -38,6 +48,7 @@
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:focusable="true"
+        android:visibility="visible"
         app:backgroundTint="#BFFFFFFF"
         app:fabCustomSize="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -87,7 +98,7 @@
                 android:layout_alignParentTop="true"
                 android:fontFamily="sans-serif"
                 android:gravity="center_horizontal"
-                android:text="Processing"
+                android:text="@string/processing"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"

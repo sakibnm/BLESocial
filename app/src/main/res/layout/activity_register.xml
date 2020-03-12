@@ -276,15 +276,15 @@
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cardView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="124dp"
+                        android:layout_height="124dp"
                         android:layout_marginStart="32dp"
                         android:layout_marginTop="32dp"
                         android:layout_marginEnd="32dp"
                         android:background="@drawable/edit_round"
                         android:backgroundTint="#99303F9F"
                         android:backgroundTintMode="src_over"
-                        app:cardCornerRadius="15dp"
+                        app:cardCornerRadius="64dp"
                         app:cardPreventCornerOverlap="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -299,7 +299,8 @@
                             android:backgroundTintMode="src_atop"
                             android:contentDescription="@string/todo"
                             android:contextClickable="true"
-                            android:scaleType="fitXY"
+                            android:maxWidth="124dp"
+                            android:scaleType="fitCenter"
                             app:srcCompat="@drawable/ic_photo_48dp" />
                     </androidx.cardview.widget.CardView>
 

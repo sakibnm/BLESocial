@@ -194,13 +194,13 @@ public class Register extends AppCompatActivity {
                 Bundle bundle = data.getExtras();
                 String imagepath = bundle.getString("filepath");
                 currentPhotoPath = imagepath;
-                Log.d(TAG, "Gallery Image path: "+currentPhotoPath);
-                setPic();
+                Log.d(TAG, "Image path: "+currentPhotoPath);
+                setPicFromPath();
             }
         }
     }
 
-    private void setPic() {
+    private void setPicFromPath() {
         // Get the dimensions of the View
         int targetW = ivUserPhoto.getMaxWidth();
         int targetH = ivUserPhoto.getMaxHeight();
@@ -220,10 +220,10 @@ public class Register extends AppCompatActivity {
         bmOptions.inSampleSize = scaleFactor;
 //        bmOptions.inPurgeable = true;
 
-//        this.bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-////        this.bitmap = Bitmap.createScaledBitmap(this.bitmap, 1280, 960,false);
-////        Log.d("demo", "setPic: "+ this.bitmap.getWidth()+" "+this.bitmap.getHeight());
-////        Log.d("demo", "setPic: "+ this.bitmap.getByteCount()/1000);
+        this.bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+//        this.bitmap = Bitmap.createScaledBitmap(this.bitmap, 1280, 960,false);
+//        Log.d("demo", "setPic: "+ this.bitmap.getWidth()+" "+this.bitmap.getHeight());
+//        Log.d("demo", "setPic: "+ this.bitmap.getByteCount()/1000);
 //        ivUserPhoto.setImageBitmap(this.bitmap);
         File imageFile = new File(currentPhotoPath);
         if (imageFile.exists())Picasso.get().load(imageFile).into(ivUserPhoto);
