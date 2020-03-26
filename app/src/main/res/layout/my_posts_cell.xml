@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#02142F"
     android:orientation="vertical"
     android:paddingTop="0dp">
 
@@ -12,12 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_weight="1"
-        android:background="#5B113F08" />
+        android:background="#E3F2FD" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#E2E1E1"
+        android:layout_height="wrap_content"
+        android:background="#02142F"
         android:persistentDrawingCache="animation">
 
         <androidx.cardview.widget.CardView
@@ -25,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
             android:padding="0dp"
-            app:cardBackgroundColor="#F1F3F3"
+            app:cardBackgroundColor="#0D47A1"
             app:cardCornerRadius="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -34,57 +35,36 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="#02142F">
 
                 <Button
                     android:id="@+id/button_my_Stop_Posting"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="64dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="64dp"
                     android:background="@drawable/button_round_cancel"
                     android:drawableLeft="@drawable/ic_stop_posting"
                     android:drawablePadding="2dp"
                     android:includeFontPadding="false"
                     android:padding="4dp"
                     android:text="@string/button_text_stop_posting"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/card_image"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/card_comment" />
-
-                <ImageView
-                    android:id="@+id/iv_my_flag"
-                    android:layout_width="32dp"
-                    android:layout_height="24dp"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginEnd="16dp"
-                    android:scaleType="fitXY"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/content_24dp" />
-
-                <TextView
-                    android:id="@+id/tv_my_place"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="4dp"
-                    android:text="TextView"
-                    app:layout_constraintEnd_toStartOf="@+id/iv_my_flag"
-                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_my_Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
                     android:text="TextView"
+                    android:textColor="#E1F5FE"
                     android:textStyle="bold|italic"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -92,34 +72,35 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="22dp"
-                    android:layout_marginBottom="22dp"
+                    android:layout_marginTop="24dp"
                     android:text="TextView"
+                    android:textColor="#E1F5FE"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/cardView5"
-                    app:layout_constraintTop_toBottomOf="@+id/card_image" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/card_comment"
                     android:layout_width="0dp"
-                    android:layout_height="124dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    app:cardBackgroundColor="#F1F3F3"
+                    app:cardBackgroundColor="#02142F"
                     app:cardCornerRadius="4dp"
                     app:cardElevation="1dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/card_image"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_my_Title">
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card_image">
 
                     <TextView
                         android:id="@+id/tv_my_comment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="TextView" />
+                        android:text="TextView"
+                        android:textColor="#E1F5FE" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -128,38 +109,37 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    app:cardCornerRadius="4dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="16dp"
+                    app:cardBackgroundColor="#02142F"
+                    app:cardCornerRadius="16dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/card_image">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:id="@+id/iv_my_photo"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
+                        android:scaleType="fitXY"
                         app:srcCompat="@drawable/ic_username" />
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/card_image"
-                    android:layout_width="184dp"
-                    android:layout_height="124dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    app:cardBackgroundColor="#EEF3F4"
+                    android:layout_width="0dp"
+                    android:layout_height="480dp"
+                    android:layout_marginTop="8dp"
+                    app:cardBackgroundColor="#02142F"
                     app:cardCornerRadius="4dp"
                     app:cardElevation="1dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_my_Title">
+                    app:layout_constraintTop_toBottomOf="@+id/tv_my_username">
 
                     <ImageView
                         android:id="@+id/iv_my_userphoto"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
+                        android:scaleType="fitCenter"
                         app:srcCompat="@drawable/content_24dp" />
                 </androidx.cardview.widget.CardView>
             </androidx.constraintlayout.widget.ConstraintLayout>

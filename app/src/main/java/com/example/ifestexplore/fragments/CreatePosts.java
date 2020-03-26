@@ -30,7 +30,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ifestexplore.R;
+import com.example.ifestexplore.Register;
 import com.example.ifestexplore.models.Ad;
+import com.example.ifestexplore.utils.camera.TakePhoto;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -80,18 +82,15 @@ public class CreatePosts extends Fragment implements View.OnClickListener {
     private OnFragmentInteractionListener mListener;
     private View view;
     private CardView cardViewTakePhoto;
-    private ImageView iv_createAdPhoto;
+    private CardView cardViewShowPhoto;
+    private ImageView iv_showAdPhoto;
     private Bitmap bitmap;
     private Button button_createAd;
     private Button button_createAdClear;
     private EditText et_Title;
     private EditText et_Comment;
-    private String booth_Name;
-    private String booth_Flag;
-    private Button button_searchCountry;
     private Boolean takenPhoto = false;
     private Boolean commentGiven = false;
-    private Boolean boothSelected = false;
     String currentPhotoPath;
 
 
@@ -138,7 +137,8 @@ public class CreatePosts extends Fragment implements View.OnClickListener {
         button_createAd = view.findViewById(R.id.button_createAd_share);
         button_createAdClear = view.findViewById(R.id.button_createAdClearAll);
         cardViewTakePhoto = view.findViewById(R.id.card_addPhoto);
-        iv_createAdPhoto = view.findViewById(R.id.iv_createAdPhoto);
+        cardViewShowPhoto= view.findViewById(R.id.card_showPhoto);
+        iv_showAdPhoto = view.findViewById(R.id.iv_showPhoto);
         cardViewTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,8 +146,14 @@ public class CreatePosts extends Fragment implements View.OnClickListener {
             }
         });
 
+        cardViewShowPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchTakePictureIntent();
+            }
+        });
+
         button_createAd.setOnClickListener(this);
-        button_searchCountry.setOnClickListener(this);
         button_createAdClear.setOnClickListener(this);
 
         return view;
@@ -198,10 +204,10 @@ public class CreatePosts extends Fragment implements View.OnClickListener {
             FirebaseUser user = mAuth.getCurrentUser();
 
 
-            if(takenPhoto && titleGiven && commentGiven && boothSelected){
+            if(takenPhoto && titleGiven && commentGiven){
                 displayProgressBar();
                 String activeFlag = "active";
-                this.createdAd = new Ad(user.getEmail(), user.getDisplayName(),"", user.getPhotoUrl().toString(),"",et_Title.getText().toString(),et_Comment.getText().toString(), booth_Name, booth_Flag, activeFlag);
+                this.createdAd = new Ad(user.getEmail(), user.getDisplayName(),"", user.getPhotoUrl().toString(),"",et_Title.getText().toString(),et_Comment.getText().toString(), null, null, activeFlag);
                 uploadImage(bitmap);
             } else {
                 Toast.makeText(getContext(), "Please check everything!", Toast.LENGTH_SHORT).show();
@@ -212,96 +218,33 @@ public class CreatePosts extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void searchAndAddCountry() {
-        CountryPicker.Builder builder = new CountryPicker.Builder().with(getContext()).listener(new OnCountryPickerListener() {
-            @Override
-            public void onSelectCountry(Country country) {
-//                Log.d(TAG, "onSelectCountry: "+country.getName()+" clicked!");
-                booth_Name = country.getName();
-                String countryWords[]  = booth_Name.split(" ", 2);
-                String firstWord = countryWords[0];
-                if (firstWord.contains(",")){
-                    booth_Name = firstWord.substring(0,firstWord.length()-1);
-                }
-
-                booth_Flag = String.valueOf(country.getFlag());
-                button_searchCountry.setText(booth_Name);
-                button_searchCountry.setCompoundDrawablesRelativeWithIntrinsicBounds(view.getResources().getDrawable(Integer.parseInt(booth_Flag), null),null,null,null);
-                boothSelected = true;
-
-            }
-        }).sortBy(CountryPicker.SORT_BY_NAME);
-
-        CountryPicker picker = builder.build();
-
-        picker.showBottomSheet((AppCompatActivity) getActivity());
-
-    }
-
-
-
 //    Taking photo____________________________________________________________________________________________________________________________________________
 
     private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        takePictureIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            photoFile = createImageFile();
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(getContext(),
-                        "com.example.android.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, CAM_REQ);
-            }
-        }
-    }
-
-    private File createImageFile() {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = null;
-        try {
-            image = File.createTempFile(
-                    imageFileName,  /* prefix */
-                    ".jpg",         /* suffix */
-                    storageDir      /* directory */
-            );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
+        Intent intent = new Intent(getContext(), TakePhoto.class);
+        intent.putExtra("purpose", "POST");
+        startActivityForResult(intent, CAM_REQ);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        galleryAddPic();
+        //        Camera photo......
+        if (requestCode == CAM_REQ){
+            if (data !=null) {
+                Bundle bundle = data.getExtras();
+                String imagepath = bundle.getString("filepath");
+                currentPhotoPath = imagepath;
+                Log.d(TAG, "Image path: "+currentPhotoPath);
+                setPicFromPath();
+            }
+        }
     }
 
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(currentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        getActivity().sendBroadcast(mediaScanIntent);
-
-        setPic();
-    }
-
-    private void setPic() {
+    private void setPicFromPath() {
         // Get the dimensions of the View
-        int targetW = iv_createAdPhoto.getMaxWidth();
-        int targetH = iv_createAdPhoto.getMaxHeight();
+        int targetW = iv_showAdPhoto.getMaxWidth();
+        int targetH = iv_showAdPhoto.getMaxHeight();
 
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -319,13 +262,44 @@ public class CreatePosts extends Fragment implements View.OnClickListener {
 //        bmOptions.inPurgeable = true;
 
         this.bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-        this.bitmap = Bitmap.createScaledBitmap(this.bitmap, 1280, 960,false);
+        this.bitmap = cropCenter(this.bitmap);
+//        this.bitmap = Bitmap.createScaledBitmap(this.bitmap, 1280, 960,false);
 //        Log.d("demo", "setPic: "+ this.bitmap.getWidth()+" "+this.bitmap.getHeight());
-        Log.d("demo", "setPic: "+ this.bitmap.getByteCount()/1000);
-        iv_createAdPhoto.setImageBitmap(this.bitmap);
-        takenPhoto = true;
+//        Log.d("demo", "setPic: "+ this.bitmap.getByteCount()/1000);
+//        ivUserPhoto.setImageBitmap(this.bitmap);
+//        File imageFile = new File(currentPhotoPath);
+//        if (imageFile.exists())Picasso.get().load(imageFile).into(ivUserPhoto);
+        if (this.bitmap!=null) {
+            cardViewTakePhoto.setVisibility(View.INVISIBLE);
+            cardViewShowPhoto.setVisibility(View.VISIBLE);
+            iv_showAdPhoto.setImageBitmap(this.bitmap);
+            takenPhoto = true;
+        }
+        else Log.d(TAG, "setPic: "+ "can't find");
+
     }
 
+    private Bitmap cropCenter(Bitmap srcBmp) {
+        Bitmap dstBmp = null;
+        if (srcBmp.getWidth() >= srcBmp.getHeight()){
+            dstBmp = Bitmap.createBitmap(
+                    srcBmp,
+                    srcBmp.getWidth()/2 - srcBmp.getHeight()/2,
+                    0,
+                    srcBmp.getHeight(),
+                    srcBmp.getHeight()
+            );
+        }else{
+            dstBmp = Bitmap.createBitmap(
+                    srcBmp,
+                    0,
+                    srcBmp.getHeight()/2 - srcBmp.getWidth()/2,
+                    srcBmp.getWidth(),
+                    srcBmp.getWidth()
+            );
+        }
+        return dstBmp;
+    }
     //    ____________________________________________________________________________________________________________________________________________
 
 
@@ -360,9 +334,9 @@ public class CreatePosts extends Fragment implements View.OnClickListener {
                     @Override
                     public void onSuccess(Uri uri) {
                         createdAd.setItemPhotoURL(uri.toString());
+                        Log.d(TAG, "Created Ad: "+createdAd.toString());
                         getDB = FirebaseFirestore.getInstance();
                         saveDB = FirebaseFirestore.getInstance();
-                        Log.d(TAG, "onSuccess: Saving Ad First");
                         getDB.collection("v2adsRepo").document("adscounter").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
