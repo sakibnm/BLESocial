@@ -227,8 +227,7 @@ public class Home extends AppCompatActivity implements BeaconConsumer, RangeNoti
         if (sharedPrefHashMap.getHashMap()!=null)receivedAdMap = sharedPrefHashMap.getHashMap();
 
 //        SURVEY!!!!!..........
-        button_survey = findViewById(R.id.button_Survey);
-        button_survey.setOnClickListener(this);
+//        button_survey.setOnClickListener(this);
 
 //        ___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 //        setTimerForBackupAds........
@@ -1071,11 +1070,11 @@ public class Home extends AppCompatActivity implements BeaconConsumer, RangeNoti
     @Override
     public void onClick(View view) {
         switch(view.getId()){
-            case R.id.button_Survey:
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setData(Uri.parse(SURVEY_URL));
-                startActivity(browserIntent);
-                break;
+//            case R.id.button_Survey:
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+//                browserIntent.setData(Uri.parse(SURVEY_URL));
+//                startActivity(browserIntent);
+//                break;
             default:
                 break;
         }

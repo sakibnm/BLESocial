@@ -226,8 +226,6 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.AdHolder> {
         holder.tv_rec_creator.setText(ad.getCreatorName());
         holder.tv_rec_comment.setText(ad.getComment());
         holder.tv_rec_title.setText(ad.getTitle());
-        holder.tv_booth_name.setText(ad.getBoothName());
-        holder.iv_booth_flag.setImageDrawable(mContext.getResources().getDrawable(Integer.parseInt(ad.getBoothFlag()), null));
         String urlPhoto = String.valueOf(ad.getItemPhotoURL());
         String urlPhotoUser = String.valueOf(ad.getUserPhotoURL());
         String urlCreatorPhoto = String.valueOf(ad.getUserPhotoURL());
@@ -294,8 +292,6 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.AdHolder> {
             tv_rec_title = itemView.findViewById(R.id.tv_rec_title);
             iv_rec_image = itemView.findViewById(R.id.iv_rec_item_image);
             iv_creator_photo = itemView.findViewById(R.id.iv_creator_photo);
-            iv_booth_flag = itemView.findViewById(R.id.iv_rec_flag);
-            tv_booth_name = itemView.findViewById(R.id.tv_rec_place);
 //            iv_forwarder_photo = itemView.findViewById(R.id.iv_forwarder_photo);
 //            cv_fwd_photo = itemView.findViewById(R.id.cv_fwd_image);
 //            tv_fwd = itemView.findViewById(R.id.tv_fwded_by);

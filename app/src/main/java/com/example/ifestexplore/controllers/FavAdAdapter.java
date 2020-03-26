@@ -135,8 +135,6 @@ public class FavAdAdapter extends RecyclerView.Adapter<FavAdAdapter.AdHolder> {
         holder.tv_fav_title.setText(ad.getTitle());
         holder.tv_fav_comment.setText(ad.getComment());
         holder.tv_fav_creator.setText(ad.getCreatorName());
-        holder.tv_fav_booth_name.setText("At booth "+ad.getBoothName());
-        if (ad.getBoothFlag()!=null)holder.iv_fav_booth_flag.setImageDrawable(mContext.getResources().getDrawable(Integer.parseInt(ad.getBoothFlag()), null));
 
         Log.d(TAG, "FAVORITES: "+ad.toString());
         String urlPhoto = String.valueOf(ad.getItemPhotoURL());
@@ -198,8 +196,6 @@ public class FavAdAdapter extends RecyclerView.Adapter<FavAdAdapter.AdHolder> {
             iv_fav_image = itemView.findViewById(R.id.iv_fav_item_image);
             iv_fav_creator = itemView.findViewById(R.id.iv_fav_creator);
             button_fav_unfavorite = itemView.findViewById(R.id.button_fav_delete);
-            tv_fav_booth_name = itemView.findViewById(R.id.tv_fav_place);
-            iv_fav_booth_flag = itemView.findViewById(R.id.iv_fav_flag);
             this.myClickListener = myClickListener;
 
             button_fav_unfavorite.setOnClickListener(this);
