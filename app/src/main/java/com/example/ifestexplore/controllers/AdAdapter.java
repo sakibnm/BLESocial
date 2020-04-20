@@ -79,7 +79,7 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.AdHolder> {
                 final String currentEmail = user.getEmail();
                 db = FirebaseFirestore.getInstance();
 
-                final DocumentReference favAdReference = db.collection("v2favoriteAds").document(currentEmail)
+                final DocumentReference favAdReference = db.collection("favoriteAds").document(currentEmail)
                         .collection("favorites").document(favAd.getAdSerialNo());
 
                 if (textFav.equals("Mark Favorite")){
@@ -89,13 +89,13 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.AdHolder> {
                     Date date = new Date();
                     String datetime = formatter.format(date);
                     Events event = new Events(datetime, "Favorited ad: "+favAd.getAdSerialNo()+" "+favAd.getTitle());
-                    db.collection("v2users").document(user.getEmail()).collection("events").add(event);
+                    db.collection("users").document(user.getEmail()).collection("events").add(event);
 
                     favAdReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (!documentSnapshot.exists()){
-                                db.collection("v2favoriteAds").document(currentEmail).collection("favorites")
+                                db.collection("favoriteAds").document(currentEmail).collection("favorites")
                                         .document(favAd.getAdSerialNo())
                                         .set(favAd).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
@@ -127,7 +127,7 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.AdHolder> {
                     Date date = new Date();
                     String datetime = formatter.format(date);
                     Events event = new Events(datetime, "UnFavorited ad: "+favAd.getAdSerialNo()+" "+favAd.getTitle());
-                    db.collection("v2users").document(user.getEmail()).collection("events").add(event);
+                    db.collection("users").document(user.getEmail()).collection("events").add(event);
 
                     favAdReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
