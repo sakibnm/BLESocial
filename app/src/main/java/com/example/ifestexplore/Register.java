@@ -286,7 +286,7 @@ public class Register extends AppCompatActivity {
 //        Log.d(TAG, "uploadImage: "+bytes.length);
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        final StorageReference userPhotoReference = storage.getReference().child("v2userPhotos/"+user.getEmail()+"_photo.jpg");
+        final StorageReference userPhotoReference = storage.getReference().child("userPhotos/"+user.getEmail()+"_photo.jpg");
         UploadTask uploadTask = userPhotoReference.putBytes(bytes);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -397,7 +397,7 @@ public class Register extends AppCompatActivity {
 
         final FirebaseFirestore saveDB = FirebaseFirestore.getInstance();
 
-        saveDB.collection("v2users").document(email).set(usersData.toHashMap())
+        saveDB.collection("users").document(email).set(usersData.toHashMap())
             .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -408,7 +408,7 @@ public class Register extends AppCompatActivity {
                     String partInstanceID2 = usersData.getInstanceID().substring(9, 13);
                     String partInstanceID = "0x"+partInstanceID1+partInstanceID2;
                     Log.d(TAG, "PART INSTANCE ID: "+ partInstanceID1+" "+partInstanceID2+" "+partInstanceID);
-                    saveDB.collection("v2mapIDtoemail").document(partInstanceID).set(idToEmail)
+                    saveDB.collection("mapIDtoemail").document(partInstanceID).set(idToEmail)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -419,7 +419,7 @@ public class Register extends AppCompatActivity {
                             String datetime = formatter.format(date);
                             Events event = new Events(datetime, "Registered and Logged In");
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            db.collection("v2users").document(user.getEmail()).collection("events").add(event);
+                            db.collection("users").document(user.getEmail()).collection("events").add(event);
                         }
                     });
                 }

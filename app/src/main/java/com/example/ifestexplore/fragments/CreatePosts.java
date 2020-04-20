@@ -314,7 +314,7 @@ public class CreatePosts extends Fragment implements View.OnClickListener {
         new Random().nextBytes(array);
         String key = new String(array, Charset.forName("UTF-8"));
         key.replace("/","_");
-        final StorageReference userPhotoReference = storage.getReference().child("v2adsImages/"+key+".png");
+        final StorageReference userPhotoReference = storage.getReference().child("adsImages/"+key+".png");
         UploadTask uploadTask = userPhotoReference.putBytes(bytes);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -337,7 +337,7 @@ public class CreatePosts extends Fragment implements View.OnClickListener {
                         Log.d(TAG, "Created Ad: "+createdAd.toString());
                         getDB = FirebaseFirestore.getInstance();
                         saveDB = FirebaseFirestore.getInstance();
-                        getDB.collection("v2adsRepo").document("adscounter").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        getDB.collection("adsRepo").document("adscounter").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 final long current_count = (long) documentSnapshot.get("count");
@@ -346,7 +346,7 @@ public class CreatePosts extends Fragment implements View.OnClickListener {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        saveDB.collection("v2adsRepo").document("adscounter").update("count", current_count+1);
+                                        saveDB.collection("adsRepo").document("adscounter").update("count", current_count+1);
 
                                         view.findViewById(R.id.progress_createAd).setVisibility(View.GONE);
 //                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
